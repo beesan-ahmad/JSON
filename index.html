@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Student table</title>
+    <style>
+        table {
+            width: 50%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 2px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id='content'>
+        <table id='students' cellpadding='10px' style="text-align:left;">
+            <thead>
+                <tr>
+                    <th>idNumber</th>
+                    <th>Name</th>
+                </tr>                
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let xmlContent = '';
+        let tableStudents = document.getElementById('students');
+        fetch('Student.xml').then((response)=> {
+            response.text().then((xml)=>{
+                xmlContent = xml;
+
+                let parser = new DOMParser();
+                let xmlDOM = parser.parseFromString(xmlContent, 'application/xml');
+                let students = xmlDOM.querySelectorAll('student');
+
+                students.forEach(studentXmlNode => {
+
+                    let row = document.createElement('tr');
+
+                    //idNumber
+                    let td = document.createElement('td');
+                    td.innerText = studentXmlNode.children[0].innerHTML;
+                    row.appendChild(td);
+
+                    //  Name
+                    td = document.createElement('td');
+                    td.innerText = studentXmlNode.children[1].innerHTML;
+                    row.appendChild(td);
+            
+                    tableStudents.children[1].appendChild(row);
+                    
+                });
+                
+            });
+        });    
+    </script>
+</body>
+</html>
